@@ -105,10 +105,10 @@
 				//Add each to the page along with a button to
 				//remove the respective contact
 				var count = 0;
-				for(var key in contacts){
+				for(i = 0; i < contacts["names"].length; i++){
 					var p = document.createElement("p");
 					p.id = "contact_" + String(count);
-					var str = key + ": " + contacts[key];
+					var str = contacts["names"][i] + ": " + contacts["numbers"][i];
 					var node = document.createTextNode(str);
 
 					var btn = document.createElement("button");
