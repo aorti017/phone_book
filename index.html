@@ -50,9 +50,13 @@
 				type: 'POST',
 				data: {name: name, num: num}				
 			}).done(function(data){
-				populate();	
 				document.getElementById("name_input").value = "";
 				document.getElementById("num_input").value = "";
+				if(data == "fail"){
+					alert("Contact already exists");
+					return;
+				}
+				populate();	
 			});
 		}
 		

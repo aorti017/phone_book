@@ -13,6 +13,12 @@
 	$pdo = new PDO('mysql:host='.$servername.';dbname='.$dbname, $username, $password);
 
 	#Add the specified contact
+	#If contact already exists return error
 	$query = $pdo->prepare("INSERT INTO addressBook VALUES ('".$name."', ".$num.");");
-	$query->execute();
+	if($query->execute()){
+		echo "";
+	}
+	else{
+		echo "fail";
+	}
 ?>
