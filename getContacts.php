@@ -6,10 +6,10 @@
 	$password = "testpass11235";
 
 	#Establish connection the the DB
-	$pdo = new PDO('mysql:host='.$servername.';dbname='.$dbname, $username, $password);
+	$pdo = new PDO("mysql:host=".$servername.";dbname=".$dbname, $username, $password);
 
 	#Query all of the contacts
-	$query = $pdo->prepare('SELECT * FROM phoneBook;');
+	$query = $pdo->prepare("SELECT * FROM phoneBook;");
 	$query->execute();
 
 	#Get all of the query results
