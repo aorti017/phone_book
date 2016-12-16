@@ -14,7 +14,7 @@
 
 	#Add the specified contact
 	#If contact already exists return error
-	$query = $pdo->prepare("INSERT INTO addressBook VALUES ('".$name."', ".$num.");");
+	$query = $pdo->prepare("INSERT INTO phoneBook VALUES ('".$name."', ".$num.");");
 	if($query->execute()){
 		echo "";
 	}

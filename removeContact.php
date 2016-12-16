@@ -13,6 +13,6 @@
 	$pdo = new PDO('mysql:host='.$servername.';dbname='.$dbname, $username, $password);
 
 	#Remove the specified contact
-	$query = $pdo->prepare("DELETE FROM addressBook WHERE name='".$name."' and number=".$num.";");
+	$query = $pdo->prepare("DELETE FROM phoneBook WHERE name='".$name."' and number=".$num.";");
 	$query->execute();
 ?>

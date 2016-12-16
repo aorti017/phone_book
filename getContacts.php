@@ -9,7 +9,7 @@
 	$pdo = new PDO('mysql:host='.$servername.';dbname='.$dbname, $username, $password);
 
 	#Query all of the contacts
-	$query = $pdo->prepare('SELECT * FROM addressBook;');
+	$query = $pdo->prepare('SELECT * FROM phoneBook;');
 	$query->execute();
 
 	#Get all of the query results
