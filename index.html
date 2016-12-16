@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>	
+	</head>
+
+	<form>
+		Name: <input type="text" name="name" id="name_input">
+		Number: <input type="text" name="number" id="num_input">
+		<button type="button" onclick="addContact()">Add</button>
+		<br>
+	</form>
+
+	<div id='contact_display'>
+	</div>
+
+	<script>
+		function addContact(){
+			//Get the name and number of the contact to be added
+			var name = document.getElementById("name_input").value;
+			var num = document.getElementById("num_input").value;
+
+			//Check the name and number against requirements 
+			if(name.length <= 0){
+				alert("Empty name field not allowed");
+				return;
+			}
+			else if(name.length > 20){
+				alert("Maximum name length is 20 characters");
+				return;
+			}
+			if(num.length <= 0){
+				alert("Empty number field not allowed");
+				return;
+			}
+			else if(num.length > 11){
+				alert("Maximum phone number length is 11 digits");
+				return;
+			}
+			else if(!String(num).match("^[0-9]+$")){
+				alert("Only numeric values allowed in number field");
+				return;
+			}		
+
+			//Add the new contact, repopulate the page
+			//and clear the input fields
+			$.ajax({
+				url: '/addContact.php',
+				type: 'POST',
+				data: {name: name, num: num}				
+			}).done(function(data){
+				populate();	
+				document.getElementById("name_input").value = "";
+				document.getElementById("num_input").value = "";
+			});
+		}
+		
+		function removeContact(){
+			//Get the name and number of the contact to be removed
+			var btn_id = String(this.id).split('_')[1];
+			var contact_id = "contact_" + String(btn_id);
+			var info = document.getElementById(contact_id).innerHTML.split('<')[0];
+			var name = info.split(": ")[0];
+			var num = info.split(": ")[1];
+	
+			//This decodes the name in cases where the contact's name
+			//contains character such as "&"	
+			var decoder = document.createElement("div");
+			decoder.innerHTML = name;
+			name = decoder.firstChild.nodeValue;
+			
+			//Remove the contact and repopulate the page	
+			$.ajax({
+			url: '/removeContact.php',
+			type: 'POST',
+			data: {name: name, num: num}
+			}).done(function(data){
+				populate();
+			});
+		}
+
+		function populate(){
+			//Populate the page with the contacts and their removal
+			//buttons
+			$.ajax({ 
+			url: '/getContacts.php',
+			type: 'POST',
+			data: {}
+			}).done(function(data){
+				//Clear any contacts being displayed
+				var display = document.getElementById("contact_display");
+				while(display.firstChild){
+					display.removeChild(display.firstChild);
+				}
+
+				//Parse the data object returned by getContacts.php
+				var contacts = jQuery.parseJSON(data);
+
+				//Iterate over each contact in data
+				//Add each to the page along with a button to
+				//remove the respective contact
+				var count = 0;
+				for(var key in contacts){
+					var p = document.createElement("p");
+					p.id = "contact_" + String(count);
+					var str = key + ": " + contacts[key];
+					var node = document.createTextNode(str);
+
+					var btn = document.createElement("button");
+					btn.id = "btn_" + String(count);
+					btn.onclick = removeContact;
+					var removeText = document.createTextNode("X");
+					btn.appendChild(removeText);
+
+					p.appendChild(node);				
+					p.appendChild(btn);
+					display.appendChild(p);
+
+					count += 1;
+				}
+			});
+		}
+		
+		//Initial population of the page
+		populate();
+	</script>
+</html>
